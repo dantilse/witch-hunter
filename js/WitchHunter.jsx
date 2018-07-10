@@ -20,21 +20,13 @@ class WitchHunter extends Component {
     };
   }
 
-
+  // modify state on user interaction
   handleWitchCheck(e) {
-    const button = document.getElementById('button_check');
-    const buttonWidth = button.getBoundingClientRect().width;
-    const posLeft = e.pageX - e.currentTarget.offsetLeft;
-
     this.setState({ isSet: true });
-
-    if (posLeft > (buttonWidth / 2)) {
-      this.setState({ isWitch: true });
-    } else {
-      this.setState({ isWitch: false });
-    }
+    this.setState({ isWitch: e });
   }
 
+  // reset state
   handleWitchReset() {
     this.setState({ isSet: false });
   }
@@ -46,12 +38,32 @@ class WitchHunter extends Component {
           <h1>Are you a Witch?</h1>
         </header>
         <section className="card-body">
-          {this.state.isSet ? <div>{this.state.isWitch ? <ConfirmWitch /> : <DenyWitch />}</div> : <p>Click the button below to find out.</p>}
+          {this.state.isSet ? (
+            <div>{this.state.isWitch ? <ConfirmWitch /> : <DenyWitch />}</div>
+          ) : (
+            <p>Click the button below to find out.</p>
+          )}
         </section>
         <footer className="card-footer">
-          {
-            this.state.isSet ? <WitchCheckReset action={this.handleWitchReset} /> : <WitchCheckButton action={this.handleWitchCheck} />
-          }
+          {this.state.isSet ? (
+            <div className="row">
+              <div className="col-sm-4">
+                <WitchCheckReset action={this.handleWitchReset} />
+              </div>
+              <div className="col-sm-8">
+                <WitchCheckButton
+                  action={this.handleWitchCheck}
+                  label="Check again"
+                />
+              </div>
+            </div>
+          ) : (
+            <WitchCheckButton
+              action={this.handleWitchCheck}
+              isWitch={this.state.isWitch}
+              label="Check"
+            />
+          )}
         </footer>
       </article>
     );
